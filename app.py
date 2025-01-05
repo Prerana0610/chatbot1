@@ -14,19 +14,20 @@ nltk.data.path.append(os.path.abspath("C:\\Users\\Admin\\Documents\\intents.json
 nltk.download('punkt')
 
 # Load intents from the JSON file
-file_path = os.path.abspath("C:\\Users\\Admin\\Documents\\intents.json")
+file_path = os.path.abspath("C:\\Users\\nithe\\OneDrive\\Desktop\\chatbot1\\intents.json")
 with open(file_path, "r") as file:
       intents = json.load(file)
-
+print(intents['intents'])
 # Create the vectorizer and classifier
 vectorizer = TfidfVectorizer()
 clf = LogisticRegression(random_state=0, max_iter=10000)
 
 tags = []
 patterns = []
-for intent in intents:
+for intent in intents['intents']:
     try:
         # Ensure 'patterns' and 'tag' exist and are valid
+        print(intent)
         intent_patterns = intent.get('patterns', [])
         intent_tag = intent.get('tag', 'unknown')
 
@@ -35,8 +36,8 @@ for intent in intents:
             tags.append(intent_tag)
             patterns.append(pattern)
     except Exception as e:
-        print(f"Error processing intent: {intent}. Exception: {e}")
-
+        print("Error processing intent: {intent}. Exception: {e}")
+        raise e
 # training the model
 x = vectorizer.fit_transform(patterns)
 y = tags
